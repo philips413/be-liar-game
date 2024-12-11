@@ -18,7 +18,10 @@ public class ChatController {
 
     private final SimpMessageSendingOperations template;
 
-    //채팅 리스트 반환
+    // 채팅방 리스트 조회
+
+
+    //채팅방 참가!
     @GetMapping("/chat/{id}")
     public ResponseEntity<List<ChatMessage>> getChatMessages(@PathVariable String id) {
         ChatMessage test = new ChatMessage(1L, "TEST", "TEST");

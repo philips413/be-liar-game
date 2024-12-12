@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -25,4 +26,10 @@ public class Participants {
 
     @CreationTimestamp
     private LocalDateTime createdAt;
+
+    @Builder(builderMethodName = "creator")
+    public Participants(String name, String cookie) {
+        this.name = name;
+        this.cookie = cookie;
+    }
 }

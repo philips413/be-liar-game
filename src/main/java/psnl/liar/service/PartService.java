@@ -18,7 +18,10 @@ public class PartService {
     public Participants createUser(CreateUserDto user) {
         Participants entity = Participants.creator()
                 .name(user.getName())
+                .cookie(user.getCookie())
                 .build();
+
+        System.out.println(user.toString());
         Participants result = participantsRepository.save(entity);
         return result;
     }

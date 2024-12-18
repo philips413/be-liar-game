@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class CreateChatRoomDto {
 
-    private String roomName;
+    private String name;
 
     private Integer limit;
 

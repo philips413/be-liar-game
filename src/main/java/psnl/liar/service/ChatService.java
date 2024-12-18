@@ -22,7 +22,7 @@ public class ChatService {
 
     public Chat createRoom(CreateChatRoomDto request) {
         Chat entity = Chat.creator()
-                .title(request.getRoomName())
+                .title(request.getName())
                 .leader(request.getLeader().toString())
                 .participants(request.getLimit())
                 .build();

@@ -40,7 +40,7 @@ public class ChatController {
     //채팅방 참가!
     @GetMapping("/chat/{id}")
     public ResponseEntity<List<ChatMessage>> getChatMessages(@PathVariable String id) {
-        ChatMessage test = new ChatMessage(1L, "TEST", "TEST");
+        ChatMessage test = new ChatMessage(id, "TEST", "TEST");
         return ResponseEntity.ok().body(List.of(test));
     }
 
@@ -49,7 +49,7 @@ public class ChatController {
     @MessageMapping("/message")
     public ResponseEntity receiveMessage(@RequestBody ChatMessage chat) {
 
-        template.convertAndSend("/sub/chatroom/1", chat);
+        template.convertAndSend("/sub/chatroom/"+chat.getChatId(), chat);
         return ResponseEntity.ok().build();
     }
 }

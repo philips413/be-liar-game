@@ -2,8 +2,6 @@ package psnl.liar.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import psnl.liar.entity.Participants;
 import psnl.liar.payload.dto.CreateUserDto;
 import psnl.liar.repository.ParticipantsRepository;
@@ -21,7 +19,6 @@ public class PartService {
                 .cookie(user.getCookie())
                 .build();
 
-        System.out.println(user.toString());
         Participants result = participantsRepository.save(entity);
         return result;
     }

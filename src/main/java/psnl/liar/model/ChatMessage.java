@@ -16,4 +16,13 @@ public class ChatMessage {
         this.name = name;
         this.message = message;
     }
+
+    @Override
+    public String toString() {
+        return "ChatMessage{" +
+                "chatId='" + chatId + '\'' +
+                ", name='" + name + '\'' +
+                ", message='" + message + '\'' +
+                '}';
+    }
 }

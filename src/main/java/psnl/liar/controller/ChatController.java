@@ -38,7 +38,7 @@ public class ChatController {
 
 
     //채팅방 참가!
-    @GetMapping("/chat/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<List<ChatMessage>> getChatMessages(@PathVariable String id) {
         ChatMessage test = new ChatMessage(id, "TEST", "TEST");
         return ResponseEntity.ok().body(List.of(test));
@@ -48,7 +48,6 @@ public class ChatController {
     //메시지 송신 및 수신, /pub가 생략된 모습. 클라이언트 단에선 /pub/message로 요청
     @MessageMapping("/message")
     public ResponseEntity receiveMessage(@RequestBody ChatMessage chat) {
-
         template.convertAndSend("/sub/chatroom/"+chat.getChatId(), chat);
         return ResponseEntity.ok().build();
     }

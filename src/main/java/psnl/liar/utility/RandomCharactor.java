@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class RandomCharactor {
 
-    private static final int LENGTH = 64;
+    private static final int LENGTH = 8;
 
     private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_=+[]{}|;:,.<>?/";
 

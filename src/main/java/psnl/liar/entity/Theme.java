@@ -1,9 +1,6 @@
 package psnl.liar.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +13,9 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class Theme {
 
-    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+
     private int themeId;
 
     private String themeGroupId;

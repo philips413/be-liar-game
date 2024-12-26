@@ -5,4 +5,4 @@ import org.springframework.stereotype.Repository;
 import psnl.liar.entity.Participants;
 
 @Repository
-public interface ParticipantsRepository extends JpaRepository<Participants, Long> { }
+public interface ParticipantsRepository extends JpaRepository<Participants, Integer> { }

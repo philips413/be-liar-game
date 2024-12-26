@@ -25,6 +25,8 @@ public class Chat {
 
     private String leader;
 
+    private String status;
+
     private LocalDateTime createdAt;
 
     @PrePersist

@@ -7,8 +7,12 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.web.bind.annotation.*;
 import psnl.liar.entity.Chat;
+import psnl.liar.entity.Participants;
+import psnl.liar.entity.Room;
 import psnl.liar.model.ChatMessage;
 import psnl.liar.payload.dto.CreateChatRoomDto;
+import psnl.liar.payload.dto.request.ParticipantChatRoomRequest;
+import psnl.liar.payload.dto.request.ParticipantsRequest;
 import psnl.liar.service.ChatService;
 
 import java.util.List;
@@ -36,12 +40,23 @@ public class ChatController {
         return ResponseEntity.ok().body(room);
     }
 
+    @PostMapping("/room/{chatId}/enter")
+    public void enterRoom(@PathVariable String chatId, @RequestBody ParticipantsRequest participants) {
+        chatService.enterRoom(chatId, participants);
+    }
 
     //채팅방 참가!
     @GetMapping("/{id}")
-    public ResponseEntity<List<ChatMessage>> getChatMessages(@PathVariable String id) {
-        ChatMessage test = new ChatMessage(id, "TEST", "TEST");
+    public ResponseEntity<List<ChatMessage>> getChatMessages(ParticipantChatRoomRequest request) {
+        Participants participants = chatService.participateChat(request);
+        ChatMessage test = new ChatMessage(request.getChatId(), participants.getName(), participants.getName()+"님이 입장하셨습니다.");
         return ResponseEntity.ok().body(List.of(test));
+    }
+
+    @GetMapping("/gameStart/{id}")
+    public void gameStart(@PathVariable String id) {
+        List<ChatMessage> chatMessages = chatService.gameStart(id);
+        template.convertAndSend("/sub/chatroom/"+id, chatMessages);
     }
 
 

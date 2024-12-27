@@ -8,7 +8,6 @@ import psnl.liar.entity.Participants;
 import psnl.liar.entity.Room;
 import psnl.liar.model.ChatMessage;
 import psnl.liar.payload.dto.CreateChatRoomDto;
-import psnl.liar.payload.dto.ParticipantChatRoomDto;
 import psnl.liar.payload.dto.ParticipantsDto;
 import psnl.liar.payload.dto.WebSocketResponse;
 import psnl.liar.repository.ChatRepository;
@@ -44,14 +43,6 @@ public class ChatService {
         return chatRepository.save(entity);
     }
 
-    public Participants participateChat(ParticipantChatRoomDto request) {
-        Participants participants = participantsRepository.findById(Integer.valueOf(request.getPartId()))
-                .orElseThrow(() -> new IllegalArgumentException("참여자가 존재하지 않습니다."));
-
-        return participants;
-
-    }
-
     public WebSocketResponse gameStart(String chatId) {
 
         // 제시어 사과 / 자두
@@ -63,7 +54,6 @@ public class ChatService {
                                 .findById(Integer.valueOf(dto.getPartId()))
                                 .orElseThrow(() -> new IllegalArgumentException("참여자가 존재하지 않습니다."))
                 ).toList();
-        System.out.println(collect.size());
         int size = collect.size();
         int findNum = new Random().nextInt(size);
         List<ChatMessage> list = new ArrayList<>();

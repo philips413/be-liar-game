@@ -8,13 +8,16 @@ import psnl.liar.entity.Participants;
 import psnl.liar.entity.Room;
 import psnl.liar.model.ChatMessage;
 import psnl.liar.payload.dto.CreateChatRoomDto;
-import psnl.liar.payload.dto.request.ParticipantChatRoomRequest;
-import psnl.liar.payload.dto.request.ParticipantsRequest;
+import psnl.liar.payload.dto.ParticipantChatRoomDto;
+import psnl.liar.payload.dto.ParticipantsDto;
+import psnl.liar.payload.dto.WebSocketResponse;
 import psnl.liar.repository.ChatRepository;
 import psnl.liar.repository.ParticipantsRepository;
 import psnl.liar.repository.RoomRepository;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,7 +45,7 @@ public class ChatService {
         return chatRepository.save(entity);
     }
 
-    public Participants participateChat(ParticipantChatRoomRequest request) {
+    public Participants participateChat(ParticipantChatRoomDto request) {
         Participants participants = participantsRepository.findById(Integer.valueOf(request.getPartId()))
                 .orElseThrow(() -> new IllegalArgumentException("참여자가 존재하지 않습니다."));
 
@@ -50,30 +53,38 @@ public class ChatService {
 
     }
 
-    public List<ChatMessage> gameStart(String id) {
+    public WebSocketResponse gameStart(String chatId) {
 
         // 제시어 사과 / 자두
         // ### 참여자 목록을 불러온다.
-        List<String> collect = roomRepository.findAllByChatId(id)
+        List<Participants> collect = roomRepository.findByChatIdAndStatus(chatId, YesOrNo.YES)
                 .stream()
-                .map(Room::getPartId)
-                .collect(Collectors.toList());
+                .map(
+                        dto -> participantsRepository
+                                .findById(Integer.valueOf(dto.getPartId()))
+                                .orElseThrow(() -> new IllegalArgumentException("참여자가 존재하지 않습니다."))
+                ).toList();
 
         int size = collect.size();
         int findNum = new Random().nextInt(size);
         List<ChatMessage> list = new ArrayList<>();
         for(int i = 0 ; i < size ; i++) {
+            Participants participants = collect.get(i);
             if (i == findNum) {
-                list.add(new ChatMessage(id, collect.get(i), "사과"));
+                list.add(new ChatMessage(chatId, participants.getPartId(), "사과"));
             } else {
-                list.add(new ChatMessage(id, collect.get(i), "자두"));
+                list.add(new ChatMessage(chatId, participants.getPartId(), "자두"));
             }
         }
+
         // ### 목록 중 랜덤한 인물으 선택하여 다른 단어를 준다.
-        return list;
+        return WebSocketResponse.builder()
+                .users(collect)
+                .messages(list)
+                .build();
     }
 
-    public List<Participants> enterRoom(String chatId, ParticipantsRequest request) {
+    public WebSocketResponse enterRoom(String chatId, ParticipantsDto request) {
 
         Room chatRoom = roomRepository.findByChatIdAndPartId(chatId, request.getPartId());
         if (chatRoom == null) {
@@ -88,7 +99,7 @@ public class ChatService {
             roomRepository.save(chatRoom);
         }
 
-        return roomRepository.findByChatIdAndStatus(chatId, YesOrNo.YES)
+        List<Participants> list = roomRepository.findByChatIdAndStatus(chatId, YesOrNo.YES)
                 .stream()
                 .map(
                         dto -> participantsRepository
@@ -96,19 +107,33 @@ public class ChatService {
                                 .orElseThrow(() -> new IllegalArgumentException("참여자가 존재하지 않습니다."))
                 ).toList();
 
+        return WebSocketResponse.builder()
+                .users(list)
+                .build();
+
     }
 
-    public List<Participants> exitRoom(String chatId, ParticipantsRequest request) {
+    public WebSocketResponse exitRoom(String chatId, ParticipantsDto request) {
         Room chatRoom = roomRepository.findByChatIdAndPartId(chatId, request.getPartId());
         chatRoom.exit();
         roomRepository.save(chatRoom);
 
-        return roomRepository.findByChatIdAndStatus(chatId, YesOrNo.YES)
+        List<Participants> list = roomRepository.findByChatIdAndStatus(chatId, YesOrNo.YES)
                 .stream()
                 .map(
                         dto -> participantsRepository
                                 .findById(Integer.valueOf(dto.getPartId()))
                                 .orElseThrow(() -> new IllegalArgumentException("참여자가 존재하지 않습니다."))
                 ).toList();
+
+        return WebSocketResponse.builder()
+                .users(list)
+                .build();
+    }
+
+    public Chat getRoom(String chatId) {
+        Chat chat = chatRepository.findById(chatId)
+                .orElseThrow(() -> new IllegalArgumentException("채팅방이 존재하지 않습니다."));
+        return chat;
     }
 }

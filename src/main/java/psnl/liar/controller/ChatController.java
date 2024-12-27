@@ -1,18 +1,17 @@
 package psnl.liar.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.web.bind.annotation.*;
 import psnl.liar.entity.Chat;
 import psnl.liar.entity.Participants;
-import psnl.liar.entity.Room;
 import psnl.liar.model.ChatMessage;
 import psnl.liar.payload.dto.CreateChatRoomDto;
-import psnl.liar.payload.dto.request.ParticipantChatRoomRequest;
-import psnl.liar.payload.dto.request.ParticipantsRequest;
+import psnl.liar.payload.dto.ParticipantChatRoomDto;
+import psnl.liar.payload.dto.ParticipantsDto;
+import psnl.liar.payload.dto.WebSocketResponse;
 import psnl.liar.service.ChatService;
 
 import java.util.List;
@@ -42,33 +41,31 @@ public class ChatController {
         return ResponseEntity.ok().body(room);
     }
 
+    @GetMapping("/room/{chatId}")
+    public ResponseEntity<Chat> getRoom(@PathVariable String chatId) {
+        Chat room = chatService.getRoom(chatId);
+        return ResponseEntity.ok().body(room);
+    }
+
     // 채팅방 참가하기
     @PostMapping("/room/{chatId}/enter")
-    public void enterRoom(@PathVariable String chatId, @RequestBody ParticipantsRequest participants) {
-        List<Participants> list = chatService.enterRoom(chatId, participants);
-         template.convertAndSend(TOPIC+chatId, list);
+    public void enterRoom(@PathVariable String chatId, @RequestBody ParticipantsDto participants) {
+        WebSocketResponse webSocketResponse = chatService.enterRoom(chatId, participants);
+        template.convertAndSend(TOPIC+chatId, webSocketResponse);
     }
 
     // 채팅방 퇴장하기
     @PostMapping("/room/{chatId}/exit")
-    public void exitRoom(@PathVariable String chatId, @RequestBody ParticipantsRequest participants) {
-        List<Participants> list = chatService.exitRoom(chatId, participants);
-         template.convertAndSend(TOPIC+chatId, list);
+    public void exitRoom(@PathVariable String chatId, @RequestBody ParticipantsDto participants) {
+        WebSocketResponse webSocketResponse = chatService.exitRoom(chatId, participants);
+        template.convertAndSend(TOPIC+chatId, webSocketResponse);
     }
 
-
-    //채팅방 참가!
-    @GetMapping("/{id}")
-    public ResponseEntity<List<ChatMessage>> getChatMessages(ParticipantChatRoomRequest request) {
-        Participants participants = chatService.participateChat(request);
-        ChatMessage test = new ChatMessage(request.getChatId(), participants.getName(), participants.getName()+"님이 입장하셨습니다.");
-        return ResponseEntity.ok().body(List.of(test));
-    }
 
     @GetMapping("/gameStart/{id}")
-    public void gameStart(@PathVariable String id) {
-        List<ChatMessage> chatMessages = chatService.gameStart(id);
-        template.convertAndSend(TOPIC+id, chatMessages);
+    public void gameStart(@PathVariable String chatId) {
+        WebSocketResponse webSocketResponse = chatService.gameStart(chatId);
+        template.convertAndSend(TOPIC+chatId, webSocketResponse);
     }
 
 

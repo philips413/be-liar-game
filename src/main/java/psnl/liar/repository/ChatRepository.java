@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import psnl.liar.entity.Chat;
 
 @Repository
-public interface ChatRepository extends JpaRepository<Chat, Integer> {
+public interface ChatRepository extends JpaRepository<Chat, String> {
 }

@@ -1,11 +1,12 @@
-package psnl.liar.payload.dto.request;
+package psnl.liar.payload.dto;
 
 import lombok.Data;
 
 @Data
-public class ParticipantsRequest {
+public class ParticipantChatRoomDto {
 
     private String chatId;
 
     private String partId;
+
 }

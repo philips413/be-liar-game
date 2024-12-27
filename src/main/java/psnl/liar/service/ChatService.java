@@ -2,6 +2,7 @@ package psnl.liar.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import psnl.liar.constant.YesOrNo;
 import psnl.liar.entity.Chat;
 import psnl.liar.entity.Participants;
 import psnl.liar.entity.Room;
@@ -72,12 +73,42 @@ public class ChatService {
         return list;
     }
 
-    public void enterRoom(String chatId, ParticipantsRequest request) {
-        Room entity = Room.creator()
-                .partId(request.getPartId())
-                .chatId(request.getChatId())
-                .build();
+    public List<Participants> enterRoom(String chatId, ParticipantsRequest request) {
 
-        roomRepository.save(entity);
+        Room chatRoom = roomRepository.findByChatIdAndPartId(chatId, request.getPartId());
+        if (chatRoom == null) {
+            Room entity = Room.creator()
+                    .partId(request.getPartId())
+                    .chatId(request.getChatId())
+                    .build();
+
+            roomRepository.save(entity);
+        } else {
+            chatRoom.enter();
+            roomRepository.save(chatRoom);
+        }
+
+        return roomRepository.findByChatIdAndStatus(chatId, YesOrNo.YES)
+                .stream()
+                .map(
+                        dto -> participantsRepository
+                                .findById(Integer.valueOf(dto.getPartId()))
+                                .orElseThrow(() -> new IllegalArgumentException("참여자가 존재하지 않습니다."))
+                ).toList();
+
+    }
+
+    public List<Participants> exitRoom(String chatId, ParticipantsRequest request) {
+        Room chatRoom = roomRepository.findByChatIdAndPartId(chatId, request.getPartId());
+        chatRoom.exit();
+        roomRepository.save(chatRoom);
+
+        return roomRepository.findByChatIdAndStatus(chatId, YesOrNo.YES)
+                .stream()
+                .map(
+                        dto -> participantsRepository
+                                .findById(Integer.valueOf(dto.getPartId()))
+                                .orElseThrow(() -> new IllegalArgumentException("참여자가 존재하지 않습니다."))
+                ).toList();
     }
 }

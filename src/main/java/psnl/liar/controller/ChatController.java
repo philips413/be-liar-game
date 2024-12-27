@@ -26,6 +26,8 @@ public class ChatController {
 
     private final ChatService chatService;
 
+    private final static String TOPIC = "/sub/chatroom/";
+
     // 채팅방 리스트 조회
     @GetMapping("/rooms")
     public ResponseEntity<List<Chat>> getRooms() {
@@ -40,10 +42,20 @@ public class ChatController {
         return ResponseEntity.ok().body(room);
     }
 
+    // 채팅방 참가하기
     @PostMapping("/room/{chatId}/enter")
     public void enterRoom(@PathVariable String chatId, @RequestBody ParticipantsRequest participants) {
-        chatService.enterRoom(chatId, participants);
+        List<Participants> list = chatService.enterRoom(chatId, participants);
+         template.convertAndSend(TOPIC+chatId, list);
     }
+
+    // 채팅방 퇴장하기
+    @PostMapping("/room/{chatId}/exit")
+    public void exitRoom(@PathVariable String chatId, @RequestBody ParticipantsRequest participants) {
+        List<Participants> list = chatService.exitRoom(chatId, participants);
+         template.convertAndSend(TOPIC+chatId, list);
+    }
+
 
     //채팅방 참가!
     @GetMapping("/{id}")
@@ -56,14 +68,14 @@ public class ChatController {
     @GetMapping("/gameStart/{id}")
     public void gameStart(@PathVariable String id) {
         List<ChatMessage> chatMessages = chatService.gameStart(id);
-        template.convertAndSend("/sub/chatroom/"+id, chatMessages);
+        template.convertAndSend(TOPIC+id, chatMessages);
     }
 
 
     //메시지 송신 및 수신, /pub가 생략된 모습. 클라이언트 단에선 /pub/message로 요청
     @MessageMapping("/message")
     public ResponseEntity receiveMessage(@RequestBody ChatMessage chat) {
-        template.convertAndSend("/sub/chatroom/"+chat.getChatId(), chat);
+        template.convertAndSend(TOPIC+chat.getChatId(), chat);
         return ResponseEntity.ok().build();
     }
 }

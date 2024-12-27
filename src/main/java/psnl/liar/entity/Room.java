@@ -38,4 +38,12 @@ public class Room {
         this.status = YesOrNo.YES;
     }
 
+    public void enter() {
+        this.status = YesOrNo.YES;
+    }
+
+    public void exit() {
+        this.status = YesOrNo.NO;
+    }
+
 }

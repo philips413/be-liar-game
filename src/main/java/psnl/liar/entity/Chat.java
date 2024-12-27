@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import psnl.liar.constant.YesOrNo;
 import psnl.liar.utility.RandomCharactor;
 
 import java.time.LocalDateTime;
@@ -25,7 +26,8 @@ public class Chat {
 
     private String leader;
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private YesOrNo status;
 
     private LocalDateTime createdAt;
 
@@ -44,6 +46,7 @@ public class Chat {
         this.title = title;
         this.participants = participants;
         this.leader = leader;
+        this.status = YesOrNo.YES;
 
     }
 

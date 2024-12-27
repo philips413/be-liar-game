@@ -73,7 +73,6 @@ public class ChatService {
     }
 
     public void enterRoom(String chatId, ParticipantsRequest request) {
-        System.out.println("====== 참가쓰!!! =====");
         Room entity = Room.creator()
                 .partId(request.getPartId())
                 .chatId(request.getChatId())

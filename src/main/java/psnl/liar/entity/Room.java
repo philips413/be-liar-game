@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import psnl.liar.constant.YesOrNo;
 
 import java.time.LocalDateTime;
 
@@ -20,6 +21,9 @@ public class Room {
 
     private String partId;
 
+    @Enumerated(EnumType.STRING)
+    private YesOrNo status;
+
     private LocalDateTime createdAt;
 
     @PrePersist
@@ -31,6 +35,7 @@ public class Room {
     public Room(String chatId, String partId) {
         this.chatId = chatId;
         this.partId = partId;
+        this.status = YesOrNo.YES;
     }
 
 }

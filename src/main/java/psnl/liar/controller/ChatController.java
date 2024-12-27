@@ -62,7 +62,7 @@ public class ChatController {
     }
 
 
-    @GetMapping("/gameStart/{id}")
+    @GetMapping("/gameStart/{chatId}")
     public void gameStart(@PathVariable String chatId) {
         WebSocketResponse webSocketResponse = chatService.gameStart(chatId);
         template.convertAndSend(TOPIC+chatId, webSocketResponse);

@@ -15,7 +15,7 @@ public class WebSocketResponse {
 
     private List<Participants> users;
 
-    private List<ChatMessage> messages;
+    private List<ChatMessage> question;
 
 
 }

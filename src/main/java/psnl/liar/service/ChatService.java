@@ -18,7 +18,6 @@ import psnl.liar.repository.RoomRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -64,7 +63,7 @@ public class ChatService {
                                 .findById(Integer.valueOf(dto.getPartId()))
                                 .orElseThrow(() -> new IllegalArgumentException("참여자가 존재하지 않습니다."))
                 ).toList();
-
+        System.out.println(collect.size());
         int size = collect.size();
         int findNum = new Random().nextInt(size);
         List<ChatMessage> list = new ArrayList<>();
@@ -80,7 +79,7 @@ public class ChatService {
         // ### 목록 중 랜덤한 인물으 선택하여 다른 단어를 준다.
         return WebSocketResponse.builder()
                 .users(collect)
-                .messages(list)
+                .question(list)
                 .build();
     }
 
@@ -109,6 +108,7 @@ public class ChatService {
 
         return WebSocketResponse.builder()
                 .users(list)
+                .question(new ArrayList<>())
                 .build();
 
     }
@@ -128,6 +128,7 @@ public class ChatService {
 
         return WebSocketResponse.builder()
                 .users(list)
+                .question(new ArrayList<>())
                 .build();
     }
 

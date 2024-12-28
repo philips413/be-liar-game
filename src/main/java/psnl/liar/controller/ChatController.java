@@ -49,17 +49,17 @@ public class ChatController {
     }
 
     // 채팅방 참가하기
-    @PostMapping("/room/{chatId}/enter")
-    public void enterRoom(@PathVariable String chatId, @RequestBody ParticipantsDto participants) {
-        WebSocketResponse webSocketResponse = chatService.enterRoom(chatId, participants);
-        template.convertAndSend(TOPIC+chatId, webSocketResponse);
+    @PostMapping("/room/enter")
+    public void enterRoom(@RequestBody ParticipantsDto participants) {
+        WebSocketResponse webSocketResponse = chatService.enterRoom(participants);
+        template.convertAndSend(TOPIC+participants.getChatId(), webSocketResponse);
     }
 
     // 채팅방 퇴장하기
-    @PostMapping("/room/{chatId}/exit")
-    public void exitRoom(@PathVariable String chatId, @RequestBody ParticipantsDto participants) {
-        WebSocketResponse webSocketResponse = chatService.exitRoom(chatId, participants);
-        template.convertAndSend(TOPIC+chatId, webSocketResponse);
+    @PostMapping("/room/exit")
+    public void exitRoom(@RequestBody ParticipantsDto participants) {
+        WebSocketResponse webSocketResponse = chatService.exitRoom(participants);
+        template.convertAndSend(TOPIC+participants.getChatId(), webSocketResponse);
     }
 
 

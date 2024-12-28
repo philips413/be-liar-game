@@ -73,9 +73,9 @@ public class ChatService {
                 .build();
     }
 
-    public WebSocketResponse enterRoom(String chatId, ParticipantsDto request) {
+    public WebSocketResponse enterRoom(ParticipantsDto request) {
 
-        Room chatRoom = roomRepository.findByChatIdAndPartId(chatId, request.getPartId());
+        Room chatRoom = roomRepository.findByChatIdAndPartId(request.getChatId(), request.getPartId());
         if (chatRoom == null) {
             Room entity = Room.creator()
                     .partId(request.getPartId())
@@ -88,7 +88,7 @@ public class ChatService {
             roomRepository.save(chatRoom);
         }
 
-        List<Participants> list = roomRepository.findByChatIdAndStatus(chatId, YesOrNo.YES)
+        List<Participants> list = roomRepository.findByChatIdAndStatus(request.getChatId(), YesOrNo.YES)
                 .stream()
                 .map(
                         dto -> participantsRepository
@@ -103,12 +103,12 @@ public class ChatService {
 
     }
 
-    public WebSocketResponse exitRoom(String chatId, ParticipantsDto request) {
-        Room chatRoom = roomRepository.findByChatIdAndPartId(chatId, request.getPartId());
+    public WebSocketResponse exitRoom(ParticipantsDto request) {
+        Room chatRoom = roomRepository.findByChatIdAndPartId(request.getChatId(), request.getPartId());
         chatRoom.exit();
         roomRepository.save(chatRoom);
 
-        List<Participants> list = roomRepository.findByChatIdAndStatus(chatId, YesOrNo.YES)
+        List<Participants> list = roomRepository.findByChatIdAndStatus(request.getChatId(), YesOrNo.YES)
                 .stream()
                 .map(
                         dto -> participantsRepository

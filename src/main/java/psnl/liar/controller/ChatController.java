@@ -41,6 +41,7 @@ public class ChatController {
         return ResponseEntity.ok().body(room);
     }
 
+    // 채팅방 정보 가져오기
     @GetMapping("/room/{chatId}")
     public ResponseEntity<Chat> getRoom(@PathVariable String chatId) {
         Chat room = chatService.getRoom(chatId);
@@ -62,6 +63,7 @@ public class ChatController {
     }
 
 
+    // 게임 시작!!!
     @GetMapping("/gameStart/{chatId}")
     public void gameStart(@PathVariable String chatId) {
         WebSocketResponse webSocketResponse = chatService.gameStart(chatId);

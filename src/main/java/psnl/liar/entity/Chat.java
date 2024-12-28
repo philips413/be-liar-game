@@ -26,6 +26,8 @@ public class Chat {
 
     private String leader;
 
+    private String words;
+
     @Enumerated(EnumType.STRING)
     private YesOrNo status;
 
@@ -48,6 +50,10 @@ public class Chat {
         this.leader = leader;
         this.status = YesOrNo.YES;
 
+    }
+
+    public void updateWords(String words) {
+        this.words = words;
     }
 
 }

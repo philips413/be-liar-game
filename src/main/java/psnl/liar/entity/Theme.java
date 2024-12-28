@@ -1,7 +1,6 @@
 package psnl.liar.entity;
 
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -15,23 +14,21 @@ public class Theme {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-
+    @Column(name = "theme_id", nullable = false, columnDefinition = "integer auto_increment COMMENT '테마ID'")
     private int themeId;
 
-    private String themeGroupId;
+    private String theme_group;
+
+    private String question;
 
     private String word;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @Builder(builderMethodName = "creator")
-    Theme(
-            String themeGroupId,
-            String word
-    ) {
-        this.themeGroupId = themeGroupId;
-        this.word = word;
+    @PrePersist
+    public void prePersist() {
+        this.createdAt = LocalDateTime.now();
     }
 
 }

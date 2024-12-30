@@ -31,12 +31,6 @@ public class ChatService {
 
     private final ThemeRepository themeRepository;
 
-    public List<Chat> getRooms() {
-        List<Chat> rooms = chatRepository.findAll();
-        return rooms;
-
-    }
-
     public Chat createRoom(CreateChatRoomDto request) {
         Chat entity = Chat.creator()
                 .title(request.getName())

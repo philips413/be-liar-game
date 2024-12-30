@@ -61,7 +61,7 @@ INSERT INTO THEME(theme_group, question, word) VALUES ('OBJECT', '악기','도�
 INSERT INTO THEME(theme_group, question, word) VALUES ('SPORT', '수영','서핑');
 INSERT INTO THEME(theme_group, question, word) VALUES ('SPORT', '스포츠','운동');
 INSERT INTO THEME(theme_group, question, word) VALUES ('CULTURE', '전기','가스');
-INSERT INTO THEME(theme_group, question, word) VALUES ('CULTURE', '에어컨','팬');
+INSERT INTO THEME(theme_group, question, word) VALUES ('CULTURE', '에어컨','선풍기');
 INSERT INTO THEME(theme_group, question, word) VALUES ('CULTURE', '냉장고','오븐');
 INSERT INTO THEME(theme_group, question, word) VALUES ('CULTURE', '식탁','식기');
 INSERT INTO THEME(theme_group, question, word) VALUES ('LOCATION', '하늘','구름');

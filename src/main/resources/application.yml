@@ -1,4 +1,7 @@
 spring:
+  mvc:
+    cors:
+      allowed-origins: "*"
   application:
     name: testdb
   h2:

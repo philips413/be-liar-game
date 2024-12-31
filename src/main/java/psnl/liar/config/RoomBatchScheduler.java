@@ -39,8 +39,7 @@ public class RoomBatchScheduler {
 
             LocalDateTime updatedAt = part.getUpdatedAt();
             LocalDateTime now = LocalDateTime.now();
-
-            if (ChronoUnit.SECONDS.between(updatedAt, now) >= 20) {
+            if (updatedAt == null || ChronoUnit.SECONDS.between(updatedAt, now) >= 20) {
                 part.exit();
                 roomRepository.save(part);
             }

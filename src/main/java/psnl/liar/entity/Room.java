@@ -26,6 +26,8 @@ public class Room {
 
     private LocalDateTime createdAt;
 
+    private LocalDateTime updatedAt;
+
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
@@ -44,6 +46,10 @@ public class Room {
 
     public void exit() {
         this.status = YesOrNo.NO;
+    }
+
+    public void update() {
+        this.updatedAt = LocalDateTime.now();
     }
 
 }

@@ -35,7 +35,6 @@ public class ChatService {
         Chat entity = Chat.creator()
                 .title(request.getName())
                 .leader(request.getLeader().toString())
-                .participants(request.getLimit())
                 .build();
         return chatRepository.save(entity);
     }
@@ -101,9 +100,21 @@ public class ChatService {
         for(int i = 0 ; i < size ; i++) {
             Participants participants = collect.get(i);
             if (i == findNum) {
-                list.add(new ChatMessage(chatId, participants.getPartId(), theme.getQuestion()));
+                list.add(
+                        ChatMessage.builder()
+                                .chatId(chatId)
+                                .partId(participants.getPartId())
+                                .message(theme.getQuestion())
+                                .build()
+                );
             } else {
-                list.add(new ChatMessage(chatId, participants.getPartId(), theme.getWord()));
+                list.add(
+                        ChatMessage.builder()
+                                .chatId(chatId)
+                                .partId(participants.getPartId())
+                                .message(theme.getWord())
+                                .build()
+                );
             }
         }
 
@@ -167,5 +178,11 @@ public class ChatService {
         Chat chat = chatRepository.findById(chatId)
                 .orElseThrow(() -> new IllegalArgumentException("채팅방이 존재하지 않습니다."));
         return chat;
+    }
+
+    public void status(ChatMessage chat) {
+        Room room = roomRepository.findByChatIdAndPartId(chat.getChatId(), String.valueOf(chat.getPartId()));
+        room.update();
+        roomRepository.save(room);
     }
 }

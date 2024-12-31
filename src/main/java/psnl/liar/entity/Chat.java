@@ -22,14 +22,9 @@ public class Chat {
 
     private String title;
 
-    private int participants;
-
     private String leader;
 
     private String words;
-
-    @Enumerated(EnumType.STRING)
-    private YesOrNo status;
 
     private LocalDateTime createdAt;
 
@@ -41,14 +36,11 @@ public class Chat {
     @Builder(builderMethodName = "creator")
     Chat(
             String title,
-            int participants,
             String leader
     ) {
         this.chatId = RandomCharactor.creator();
         this.title = title;
-        this.participants = participants;
         this.leader = leader;
-        this.status = YesOrNo.YES;
 
     }
 

@@ -6,15 +6,11 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.web.bind.annotation.*;
 import psnl.liar.entity.Chat;
-import psnl.liar.entity.Participants;
 import psnl.liar.model.ChatMessage;
 import psnl.liar.payload.dto.CreateChatRoomDto;
-import psnl.liar.payload.dto.ParticipantChatRoomDto;
 import psnl.liar.payload.dto.ParticipantsDto;
 import psnl.liar.payload.dto.WebSocketResponse;
 import psnl.liar.service.ChatService;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/chat")
@@ -62,10 +58,10 @@ public class ChatController {
         template.convertAndSend(TOPIC+chatId, webSocketResponse);
     }
 
-    //메시지 송신 및 수신, /pub가 생략된 모습. 클라이언트 단에선 /pub/message로 요청
-    @MessageMapping("/message")
-    public ResponseEntity receiveMessage(@RequestBody ChatMessage chat) {
-        template.convertAndSend(TOPIC+chat.getChatId(), chat);
-        return ResponseEntity.ok().build();
+    //메시지 송신 및 수신, /pub가 생략된 모습. 클라이언트 단에선 /pub/status로 요청
+    @MessageMapping("/status")
+    public void receiveMessage(@RequestBody ChatMessage chat) {
+        chatService.status(chat);
+//        template.convertAndSend(TOPIC+chat.getChatId(), chat);
     }
 }

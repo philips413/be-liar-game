@@ -62,6 +62,5 @@ public class ChatController {
     @MessageMapping("/status")
     public void receiveMessage(@RequestBody ChatMessage chat) {
         chatService.status(chat);
-//        template.convertAndSend(TOPIC+chat.getChatId(), chat);
     }
 }

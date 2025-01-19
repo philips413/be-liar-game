@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class Participants {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "part_id", nullable = false, columnDefinition = "integer auto_increment COMMENT '참가자ID'")
     private int partId;
 

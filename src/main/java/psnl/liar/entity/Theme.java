@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class Theme {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "theme_id", nullable = false, columnDefinition = "integer auto_increment COMMENT '테마ID'")
     private int themeId;
 

@@ -31,7 +31,7 @@ public class RoomBatchScheduler {
     private final SimpMessageSendingOperations template;
     private final static String TOPIC = "/sub/chatroom/";
 
-    @Scheduled(cron = "30 * * * * *")
+    @Scheduled(cron = "20 * * * * *")
     public void roomBatch() {
         log.info("========Chat Room Batch Start========");
         List<Room> roomInPeople = roomRepository.findAll();

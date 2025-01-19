@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class Room {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer chatRoomSysId;
 
     private String chatId;

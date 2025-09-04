@@ -15,22 +15,18 @@ public class Participants {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "part_id", nullable = false, columnDefinition = "integer auto_increment COMMENT '참가자ID'")
+    @Column(name = "part_id", nullable = false)
     private int partId;
 
-    @Column(name = "name", nullable = false, columnDefinition = "varchar(20) COMMENT '참가자명'")
+    @Column(name = "name", nullable = false, length = 20)
     private String name;
 
-    @Column(name = "cookie", nullable = true, columnDefinition = "varchar(512) COMMENT '쿠키값'")
+    @Column(name = "cookie", length = 512)
     private String cookie;
 
-    @Column(name = "created_at", nullable = false, columnDefinition = "datetime DEFAULT current_timestamp() COMMENT '생성일자'")
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
-
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-    }
 
     @Builder(builderMethodName = "creator")
     public Participants(String name, String cookie) {

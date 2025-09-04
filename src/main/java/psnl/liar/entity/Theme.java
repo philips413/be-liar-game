@@ -14,21 +14,19 @@ public class Theme {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "theme_id", nullable = false, columnDefinition = "integer auto_increment COMMENT '테마ID'")
+    @Column(name = "theme_id", nullable = false)
     private int themeId;
 
-    private String theme_group;
+    @Column(name = "theme_group", length = 50, nullable = false)
+    private String themeGroup;
 
+    @Column(length = 255, nullable = false)
     private String question;
 
+    @Column(length = 100, nullable = false)
     private String word;
 
     @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
-
-    @PrePersist
-    public void prePersist() {
-        this.createdAt = LocalDateTime.now();
-    }
-
 }
